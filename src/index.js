@@ -43,7 +43,7 @@ const options = {
     servers: [
       {
         
-        url: "https://postgresql-2c0g.onrender.com/",
+        url: "https://sandrahermajesty.onrender.com/",
       },
     ],
     security: [
