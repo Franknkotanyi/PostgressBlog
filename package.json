@@ -8,7 +8,7 @@
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build/src/ ./src/ -s",
     "build": "npm run build-babel",
-    "npm run start-And-migrate": "npm run migrate && npm start",
+    "start-And-migrate": "npm run migrate && npm start",
     "npm run start-And-unmigration": "npm run undomigrate && npm start",
     "start": "nodemon --exec babel-node ./src/index.js",
     "undomigrate": "npx sequelize-cli db:migrate:undo",
