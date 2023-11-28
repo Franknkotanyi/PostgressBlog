@@ -1,7 +1,6 @@
 {
-  "name": "my-postgresql",
+  "name": "sando",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "crateseeder": "npx sequelize-cli seed:generate --name demo-user",
@@ -9,8 +8,8 @@
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build/src/ ./src/ -s",
     "build": "npm run build-babel",
-    "npm run start-And-migration": "npm run migrate && npm start",
-    "npm run start-And-unmigration":"npm run undomigrate && npm start",
+    "npm run start-And-migrate": "npm run migrate && npm start",
+    "npm run start-And-unmigration": "npm run undomigrate && npm start",
     "start": "nodemon --exec babel-node ./src/index.js",
     "undomigrate": "npx sequelize-cli db:migrate:undo",
     "migrate": "sequelize db:migrate"
@@ -42,5 +41,14 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.23.2",
     "@babel/runtime": "^7.23.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Franknkotanyi/PostgressBlog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Franknkotanyi/PostgressBlog/issues"
+  },
+  "homepage": "https://github.com/Franknkotanyi/PostgressBlog#readme",
+  "description": ""
 }

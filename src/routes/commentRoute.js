@@ -8,7 +8,7 @@ import {
     getSingleComment,
     deleteComment,
 } from "../controller/commentController";
-
+//comment route
 const commentRoute = express.Router();
 commentRoute.post("/comments/add/:id",normalUserAuthentication,fileUpload.single("postImage"), addComment);
 commentRoute.get("/comments/all",getAllComments);
