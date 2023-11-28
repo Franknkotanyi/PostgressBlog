@@ -8,7 +8,7 @@ const Comment = Database["Comments"];
 const Reply = Database["Replies"];
 const Likes = Database["Likes"];
 const unLikes = Database["unLikes"];
-// adding a post
+// adding the post
 
 export const addPost = async (req, res) => {
   try {
@@ -37,7 +37,7 @@ export const addPost = async (req, res) => {
       postTitle,
       postImage: savedPostImage?.secure_url,
       postContent,
-      userId: loggedUser, // Set the user ID here
+      userId: loggedUser, 
     });
 
     return res.status(201).json({
@@ -66,20 +66,37 @@ export const getAllPosts = async (req, res) =>{
     try {
       const getPosts = await Post.findAll({
         attributes: [
-          [
-            Sequelize.literal(`(
-              SELECT COUNT(*) 
-              FROM "Likes"
-              WHERE "Likes"."postId" = "Posts"."id"
-            )`),
-            'totalLikes',
-          ],
+          
           'id',
           'postTitle',
           'postImage',
           'postContent',
           'views',
           'createdAt',
+          [
+            Sequelize.literal(`(
+              SELECT COUNT(*) 
+              FROM "Likes"
+              WHERE "Likes"."postId" = "Posts"."id"
+            )`),
+            'allLikes',
+          ],
+          [
+            Sequelize.literal(`(
+              SELECT COUNT(*) 
+              FROM "unLikes"
+              WHERE "unLikes"."postId" = "Posts"."id"
+            )`),
+            'allUnlikes',
+          ],
+          [
+            Sequelize.literal(`(
+              SELECT COUNT(*) 
+              FROM "Comments"
+              WHERE "Comments"."postId" = "Posts"."id"
+            )`),
+            'allComents',
+          ],
         ],
         include: [
           {
@@ -112,7 +129,7 @@ export const getAllPosts = async (req, res) =>{
           },
           {
             model: Likes,
-            attributes: ['likes','createdAt','updatedAt'],
+            attributes: ['createdAt'],
             include:[
               {
                 model: User,
@@ -123,7 +140,7 @@ export const getAllPosts = async (req, res) =>{
           },
           {
             model: unLikes,
-            attributes: ['unLikes','createdAt','updatedAt'],
+            attributes: ['createdAt'],
             include:[
               {
                 model: User,
@@ -204,7 +221,7 @@ export const getSinglePost = async (req, res) => {
           },
           {
             model: Likes,
-            attributes: ['likes','createdAt','updatedAt'],
+            attributes: ['createdAt'],
             include:[
               {
                 model: User,
@@ -215,7 +232,7 @@ export const getSinglePost = async (req, res) => {
           },
           {
             model: unLikes,
-            attributes: ['unLikes','createdAt','updatedAt'],
+            attributes: ['createdAt'],
             include:[
               {
                 model: User,

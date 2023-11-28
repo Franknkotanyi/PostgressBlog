@@ -13,6 +13,8 @@ import commentRoute from "./routes/commentRoute";
 import replyRoute from "./routes/replyRoute";
 import likeRoute from "./routes/likeRoute";
 import dislikeRoute from "./routes/dislikeRoute";
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
 
 import { Sequelize } from "sequelize";
 dotenv.config();
@@ -29,6 +31,41 @@ const connectToDatabase = async () => {
 connectToDatabase()
 
 const app = express();
+//Documentation Side
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "PostgreSQL Blog API Node JS",
+      version: "1.0.0",
+    },
+    servers: [
+      {
+        
+        url: "https://postgresql-2c0g.onrender.com/",
+      },
+    ],
+    security: [
+      {
+        BearerAuth: [],
+      },
+    ],
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+  },
+
+  apis: ["./src/docs/*.js"], //determination of path
+};
+const swaggerSpec = swaggerJSDoc(options)
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 
 

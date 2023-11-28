@@ -5,6 +5,7 @@ module.exports = {
   development: {
     url: process.env.DbConnection,
     dialect: "postgres",
+    
   },
   test: {
     url: process.env.DbConnection,

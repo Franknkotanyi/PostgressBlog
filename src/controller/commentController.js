@@ -1,4 +1,5 @@
 import Database from "../Database/models";
+import { Sequelize } from "sequelize";
 
 const Post = Database["Posts"];
 const User = Database["Users"];
@@ -48,7 +49,35 @@ export const addComment = async (req,res) =>{
 export const getAllComments = async (req,res) =>{
     try {
         const getComments = await Comment.findAll({
+          attributes: [
+          
+            'id',
+            'commentBody',
+            'createdAt',
+            [
+              Sequelize.literal(`(
+                SELECT COUNT(*) 
+                FROM "Replies"
+                WHERE "Replies"."commentId" = "Comments"."id"
+              )`),
+              'allReplies',
+            ],
+          ],
             include: [
+                {   model: Replies, 
+                  attributes: ['replyMessage', 'createdAt', 'updatedAt'],
+                  include: {
+                      model: User,
+                      as: 'repliedBy', 
+                      attributes: ['firstName', 'lastName', 'email', 'profile','createdAt'],
+                  }
+                },
+                {
+                    model: User,
+                    as: 'CommentedBy', 
+                    attributes: ['firstName', 'lastName', 'email', 'profile','createdAt'],
+                
+                },
                 {
                     model: Post,
                     as: 'posts',
@@ -60,29 +89,15 @@ export const getAllComments = async (req,res) =>{
                   },
                   {
                     model: Likes,
-                    attributes: ['likes','createdAt','updatedAt'],
+                    attributes: ['createdAt'],
                   },
                   
                     {
                       model: unLikes,
-                      attributes: ['unLikes','createdAt','updatedAt'],
+                      attributes: ['createdAt'],
                     }
                   ]
                 },
-                {
-                    model: User,
-                    as: 'CommentedBy', 
-                    attributes: ['firstName', 'lastName', 'email', 'profile','createdAt'],
-                    
-                },
-                {   model: Replies, 
-                    attributes: ['replyMessage', 'createdAt', 'updatedAt'],
-                    include: {
-                        model: User,
-                        as: 'repliedBy', 
-                        attributes: ['firstName', 'lastName', 'email', 'profile','createdAt'],
-                    }
-                }
                 ]
         });
         return res.status(201).json({
@@ -104,13 +119,41 @@ export const getAllComments = async (req,res) =>{
         
     }
 };
-// getting single comment by id
+// getting single comment by comment id
 
 export const getSingleComment = async (req,res) =>{
     try {
         const {id} = req.params;
         const getComment = await Comment.findByPk(id,{
+          attributes: [
+          
+            'id',
+            'commentBody',
+            'createdAt',
+            [
+              Sequelize.literal(`(
+                SELECT COUNT(*) 
+                FROM "Replies"
+                WHERE "Replies"."commentId" = "Comments"."id"
+              )`),
+              'allReplies',
+            ],
+          ],
             include: [
+              {
+                  model: User,
+                  as: 'CommentedBy', 
+                  attributes: ['firstName', 'lastName', 'email', 'profile','createdAt'],
+                  
+              },
+              {   model: Replies, 
+                  attributes: ['replyMessage', 'createdAt', 'updatedAt'],
+                  include: {
+                      model: User,
+                      as: 'repliedBy', 
+                      attributes: ['firstName', 'lastName', 'email', 'profile','createdAt'],
+                  }
+              },
                 {
                     model: Post,
                     as: 'posts',
@@ -122,29 +165,15 @@ export const getSingleComment = async (req,res) =>{
                     },
                     {
                       model: Likes,
-                      attributes: ['likes','createdAt','updatedAt'],
+                      attributes: ['createdAt'],
                     },
                     
                       {
                         model: unLikes,
-                        attributes: ['unLikes','createdAt','updatedAt'],
+                        attributes: ['createdAt'],
                       }
                     ]
                 },
-                {
-                    model: User,
-                    as: 'CommentedBy', 
-                    attributes: ['firstName', 'lastName', 'email', 'profile','createdAt'],
-                    
-                },
-                {   model: Replies, 
-                    attributes: ['replyMessage', 'createdAt', 'updatedAt'],
-                    include: {
-                        model: User,
-                        as: 'repliedBy', 
-                        attributes: ['firstName', 'lastName', 'email', 'profile','createdAt'],
-                    }
-                }
                 ]
         });
         if(!getComment){

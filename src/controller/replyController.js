@@ -1,5 +1,6 @@
 import Database from "../Database/models";
 
+
 const Post = Database["Posts"];
 const User = Database["Users"];
 const Comment = Database["Comments"]
@@ -96,7 +97,7 @@ export const getAll = async(req,res) =>{
     }
 }
 
-// getting a reply  by id
+// getting a reply  by reply id
 
 export const getReply = async (req, res) => {
     try {

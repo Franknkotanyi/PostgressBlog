@@ -24,12 +24,15 @@ module.exports = (sequelize, DataTypes) => {
 			});
     }
   }
-  unLikes.init({
-    postId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER,
-  }, {
-    sequelize,
-    modelName: 'unLikes',
-  });
+  unLikes.init(
+    {
+      postId: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "unLikes",
+    }
+  );
   return unLikes;
 };
